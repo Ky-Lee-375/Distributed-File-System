@@ -1,5 +1,7 @@
 ## System components of SDFS (Simple Distributed File System)
 
+This program aims to implement SDFS, which stands for Simple Distributed File System. Within this program, functionalities such as leader election using the Bully Algorithm, as well as Read/Write/Delete operations on files in SDFS will be possible.
+
 Leader/Master
 
 - Serves as coordinator and manages `put` and `get` requests for files.
@@ -9,13 +11,13 @@ Leader/Master
 
 Client/Worker
 
-- Will recieve a fetch request from the Leader to get a file from its local directory
-- Store membership list of all other nodes. If the leader goes down, each node should use their membership list to elect a new leader.
+- Will receive a fetch request from the Leader to get a file from its local directory
+- Store membership list of all other nodes. If the leader goes down, each node should use its membership list to elect a new leader.
 - Be able to replicate data (file and metadata) in the event that a node goes down.
 
 Membership List and Gossip
 
-- Have a .txt file that stores the membership list at each machine. The best solution MP2 code will be modified to be abel to read and write from this file. Our MP3 code will be able to read from this membership list to know what nodes are alive at any given point. There needs to be a gateway to handle reads and writes using mutex locks since the .txt file is a shared resource.
+- Have a .txt file that stores the membership list at each machine. The best solution MP2 code will be modified to be able to read and write from this file. Our MP3 code will be able to read from this membership list to know what nodes are alive at any given point. There needs to be a gateway to handle reads and writes using mutex locks since the .txt file is a shared resource.
 
 ## Functionalities
 
@@ -23,4 +25,4 @@ Leader will be the first node that joins, and will also be known as the introduc
 
 Nodes will be ranked in order of seniority. This means if the goes down, all requests will be routed to the next most senior node. Additionally, the next most senior node should know that it has been elected as the new leader. For consistency, we will define senority as the longest continuously running node, so a node that returns to the network will be considered the least senior, since it has the shortest continuous run time.
 
-When a new leader is appointed, it will need to replicate all of the files of the downed nodes. Choosing where to replicate each file will be done by 
+When a new leader is appointed, it will need to replicate all of the files of the downed nodes. Choosing where to replicate each file will be done by maintaining a priority queue.
